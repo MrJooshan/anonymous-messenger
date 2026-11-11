@@ -168,3 +168,24 @@ body > .card {
     color: #8b90a8;
     line-height: 1.6;
 }
+
+/* ===== Footer ===== */
+.site-footer {
+    margin: 40px auto 24px;
+    max-width: 640px;
+    padding: 0 24px;
+    text-align: center;
+    font-size: 13px;
+    color: #8b90a8;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+.site-footer a {
+    color: #9b8cff;
+    text-decoration: none;
+}
+.site-footer a:hover { text-decoration: underline; }
+.site-footer .sep { color: #2b3352; }
