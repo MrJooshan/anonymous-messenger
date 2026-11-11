@@ -1,0 +1,170 @@
+* { box-sizing: border-box; }
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+    background: #0f1220;
+    color: #e6e6f0;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.card {
+    background: #1a1f36;
+    border-radius: 16px;
+    padding: 28px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.5);
+}
+h1, h2 { margin-top: 0; }
+label { display: block; margin: 14px 0 6px; font-size: 14px; color: #a8adc7; }
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #2b3352;
+    background: #0f1424;
+    color: #e6e6f0;
+    font-size: 15px;
+}
+textarea { min-height: 120px; resize: vertical; }
+button {
+    margin-top: 18px;
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg,#6c63ff,#a855f7);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+button:hover { opacity: .9; }
+.msg { padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; font-size: 14px; }
+.msg.error   { background: #3a1a1a; color: #ffb3b3; }
+.msg.success { background: #16321c; color: #a6f3b7; }
+.link { color: #9b8cff; text-decoration: none; }
+.topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 18px;
+}
+.badge {
+    background: #2b3352; padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; color: #c3c8e0;
+}
+.inbox { max-width: 640px; }
+.message {
+    background: #0f1424;
+    border: 1px solid #2b3352;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+.message time { font-size: 12px; color: #8b90a8; }
+
+/* ===== Header / Layout ===== */
+.site-header {
+    position: fixed;
+    top: 0; right: 0; left: 0;
+    height: 60px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(15,18,32,.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #2b3352;
+    z-index: 10;
+}
+.site-header .brand {
+    display: flex; align-items: center; gap: 8px;
+    color: #e6e6f0; text-decoration: none;
+    font-weight: 700; font-size: 18px;
+}
+.site-header .brand .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: linear-gradient(135deg,#6c63ff,#a855f7);
+    box-shadow: 0 0 12px #6c63ff;
+}
+.site-header .nav { display: flex; align-items: center; gap: 6px; }
+.site-header .nav a {
+    color: #a8adc7; text-decoration: none;
+    padding: 8px 12px; border-radius: 8px; font-size: 14px;
+    transition: .15s;
+}
+.site-header .nav a:hover { background: #2b3352; color: #fff; }
+.site-header .nav a.active { color: #fff; background: #2b3352; }
+.site-header .nav a.btn-ghost {
+    background: linear-gradient(135deg,#6c63ff,#a855f7);
+    color: #fff;
+}
+.site-header .nav a.btn-ghost:hover { opacity: .9; }
+
+/* فاصله زیر هدر fixed */
+body { display: block; padding-top: 84px; }
+body > .container,
+body > .card {
+    margin: 0 auto;
+    max-width: 640px;
+    padding: 0 24px 32px;
+}
+
+/* روی موبایل */
+@media (max-width: 480px) {
+    .site-header { padding: 0 12px; }
+    .site-header .nav a { padding: 6px 8px; font-size: 13px; }
+}
+
+/* ===== Dashboard extras ===== */
+.badge-accent {
+    background: linear-gradient(135deg,#6c63ff,#a855f7);
+    color: #fff;
+}
+.copy-row {
+    display: flex; gap: 8px; align-items: stretch;
+}
+.copy-row input { flex: 1; }
+.btn-inline {
+    width: auto !important;
+    margin: 0 !important;
+    padding: 10px 16px;
+    font-size: 14px;
+}
+.empty-state {
+    text-align: center;
+    padding: 32px 12px;
+    color: #a8adc7;
+    border: 1px dashed #2b3352;
+    border-radius: 12px;
+    margin-top: 12px;
+}
+.message.unread {
+    border-color: #6c63ff;
+    box-shadow: 0 0 0 1px rgba(108,99,255,.3);
+}
+.message-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #8b90a8;
+}
+.dot-new {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #6c63ff;
+    box-shadow: 0 0 8px #6c63ff;
+}
+.message-body { line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+
+/* ===== Hints ===== */
+.hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #8b90a8;
+    line-height: 1.6;
+}
