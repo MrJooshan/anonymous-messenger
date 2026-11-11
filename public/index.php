@@ -1,73 +1,30 @@
 <?php
-require __DIR__ . '/../config/db.php';
-require __DIR__ . '/../includes/functions.php';
+declare(strict_types=1);
 
-$isAjax  = ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest';
-$errors  = [];
-$success = '';
+use App\Core\Router;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    verify_csrf();
+require __DIR__ . '/../vendor/autoload.php';
 
-    $username = trim($_POST['username'] ?? '');
-    $body     = trim($_POST['body'] ?? '');
+// بارگذاری .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
-    if ($username === '') {
-        $errors[] = 'نام کاربری گیرنده را وارد کنید.';
-    }
-    if ($body === '' || mb_strlen($body) > 1000) {
-        $errors[] = 'پیام باید بین ۱ تا ۱۰۰۰ کاراکتر باشد.';
-    }
-
-    if (!$errors) {
-        $receiver = find_user_by_username($pdo, $username);
-        if (!$receiver) {
-            $errors[] = 'کاربری با این نام پیدا نشد.';
-        } else {
-            $stmt = $pdo->prepare('INSERT INTO messages (receiver_id, body) VALUES (?, ?)');
-            $stmt->execute([$receiver['id'], $body]);
-            $success = 'پیام شما به صورت ناشناس ارسال شد ✨';
-        }
-    }
-
-    if ($isAjax) {
-        header('Content-Type: application/json; charset=utf-8');
-        echo json_encode(['errors' => $errors, 'success' => $success], JSON_UNESCAPED_UNICODE);
-        exit;
-    }
+// error handler
+$appConfig = require __DIR__ . '/../config/app.php';
+if ($appConfig['debug']) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', '1');
+} else {
+    ini_set('display_errors', '0');
 }
 
-$pageTitle  = 'ارسال پیام ناشناس';
-$activePage = 'send';
-require __DIR__ . '/../includes/header.php';
-?>
+// start session
+session_start([
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'Lax',
+    'cookie_secure'   => ($_SERVER['HTTPS'] ?? '') === 'on',
+]);
 
-<div class="card">
-    <h1>پیام ناشناس</h1>
-    <p style="color:#a8adc7;font-size:14px;margin-top:-8px;">
-        بدون ثبت‌نام پیام بفرست. گیرنده هرگز نمی‌فهمه از طرف کیه.
-    </p>
-
-    <?php foreach ($errors as $err): ?>
-        <div class="msg error"><?= e($err) ?></div>
-    <?php endforeach; ?>
-    <?php if ($success): ?>
-        <div class="msg success"><?= e($success) ?></div>
-    <?php endif; ?>
-
-    <form method="post" autocomplete="off" data-ajax-send>
-        <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
-
-        <label for="username">نام کاربری گیرنده</label>
-        <input id="username" name="username" required maxlength="30"
-               value="<?= e($_POST['username'] ?? '') ?>">
-
-        <label for="body">متن پیام</label>
-        <textarea id="body" name="body" required maxlength="1000"
-                  placeholder="سلام... یه چیزی می‌خواستم بگم 👀"><?= e($_POST['body'] ?? '') ?></textarea>
-
-        <button type="submit">ارسال ناشناس</button>
-    </form>
-</div>
-
-<?php require __DIR__ . '/../includes/footer.php'; ?>
+$router = new Router();
+require __DIR__ . '/../routes.php';
+$router->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
